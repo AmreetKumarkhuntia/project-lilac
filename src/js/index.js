@@ -1,4 +1,4 @@
-import { defaultDisplaySettings, keyToSettingMap } from './defaults.js';
+import { defaultDisplaySettings, keyToSettingMap, colorsMap, defaultKeyColorMap } from './defaults.js';
 
 /** 
  * * ProcessLogger class for logging process information.
@@ -8,6 +8,7 @@ class ProcessLogger {
     // Default settings with displayOrder initialized to defaultDisplaySettings
     settings = {
         displayOrder: defaultDisplaySettings,
+        colorsMap: defaultKeyColorMap
     }
 
     /**
@@ -15,13 +16,14 @@ class ProcessLogger {
      * @param {Object} settings - Settings for the logger.
      */
 
-    constructor(settings) {
+    constructor(settings,colorsMap) {
         /**
          * & If settings are provided, override default settings
          * TODO: Make more customisable
          */
         
         if (settings) this.settings = settings;
+        if(colorsMap) this.colorsMap = colorsMap
     }
 
     /**
@@ -39,13 +41,16 @@ class ProcessLogger {
         // Iterate through each setting in the displayOrder
         for (let i = 0; i < size; i++) {
             const setting = this.settings.displayOrder[i];
-            const val = obj[keyToSettingMap[setting]]; // Get the value corresponding to the current setting from the object
+            const key = keyToSettingMap[setting]
+            const val = obj[key]; // Get the value corresponding to the current setting from the object
 
             // Append the value to the printString
+            printString += this.settings.colorsMap[key].fgColor;
+            printString += this.settings.colorsMap[key].bgColor;
+            printString += " ";
             printString += val;
-
-            // Add separator if it's not the last setting
-            if (i !== size - 1) printString += ' | ';
+            printString += " "
+            printString += colorsMap.reset;
         }
 
         // Print the final string
