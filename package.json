@@ -2,7 +2,7 @@
   "type": "module",
   "name": "project-lilac",
   "version": "1.0.0",
-  "description": "process logger repo",
+  "description": "A Node.js process logger for backend applications",
   "main": "index.js",
   "directories": {
     "doc": "docs",
