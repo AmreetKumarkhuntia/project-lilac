@@ -1,10 +1,11 @@
 // Import ProcessLogger from index.js file located in ../src/js directory
-import ProcessLogger from "../src/js/index.js";
+import ProcessLogger from "../../src/js/index.js";
 
 // Create a new instance of ProcessLogger
 const logger = new ProcessLogger({
   displayOrder: [
-    "TIME", // Display time
+    "TIME", // Display time,
+    "ORDERID",
     "PROCESSID", // Display process ID
     "FUNCTIONNAME", // Display function name
     "TYPE", // Display type
@@ -21,40 +22,32 @@ function generateUUID() {
 }
 
 // Function to generate a random log object
-function generateRandomLog() {
-  // Generating a random orderId
-  const orderId = Math.floor(Math.random() * 1000).toString();
-  // Generating a random sessionId
+function testRandomLog() {
   const sessionId = generateUUID();
   // Generating a random processId
   const processId = generateUUID();
   // Fixed value for functionName
   const functionName = "testingString";
-  // Fixed value for type
-  const type = "functionCalled";
+
+  const functionType = "functionCalled";
   // Fixed value for body, represented as a JSON string
-  const body = JSON.stringify({
+  const body = {
     orderId: "1",
     sessionId: "abcdef123456",
     processId: "obj",
     functionName: "function",
     type: "types",
     body: "bodies",
-  });
-
-  // Return the generated log object
-  return {
-    orderId,
-    sessionId,
-    processId,
-    functionName,
-    type,
-    body,
   };
+
+  logger.logWithSetValues(functionName, functionType, body);
+  logger.logWithSetValues(functionName, functionType, body);
+
+  logger.logWithSetValues(functionName, functionType, body);
+
+  logger.logWithSetValues(functionName, functionType, body);
+
+  logger.logWithSetValues(functionName, functionType, body);
 }
 
-// Generate a random log object
-const randomLog = generateRandomLog();
-
-// Log the generated log using the logger instance
-logger.log(randomLog);
+testRandomLog();
