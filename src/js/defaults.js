@@ -138,18 +138,17 @@ export const colorsMap = {
  * * Contains default key color map.
  * & Maps each key to its corresponding foreground and background colors.
  */
-
 export const defaultKeyColorMap = {
   orderId: {
     fgColor: colorsMap.bold + colorsMap.fg.white,
-    bgColor: colorsMap.bg.magenta,
-    fgComplementary: colorsMap.fg.magenta,
-    bgComplementary: colorsMap.bg.magenta,
+    bgColor: colorsMap.bg.darkOlive,
+    fgComplementary: colorsMap.fg.darkOlive,
+    bgComplementary: colorsMap.bg.white,
   },
   sessionId: {
     fgColor: colorsMap.bold + colorsMap.fg.white,
-    bgColor: colorsMap.bg.red,
-    fgComplementary: colorsMap.fg.red,
+    bgColor: colorsMap.bg.darkRed,
+    fgComplementary: colorsMap.fg.darkRed,
     bgComplementary: colorsMap.bg.white,
   },
   processId: {
@@ -183,7 +182,6 @@ export const defaultKeyColorMap = {
     bgComplementary: colorsMap.bg.white,
   },
 };
-
 export const months = [
   "January",
   "February",
