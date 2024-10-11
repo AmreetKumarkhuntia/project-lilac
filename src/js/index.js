@@ -4,7 +4,6 @@ import {
   colorsMap,
   defaultKeyColorMap,
   months,
-  days,
   defaultSeparator,
 } from "./defaults.js";
 import { generateUUID } from "./utils.js";
@@ -27,7 +26,7 @@ class ProcessLogger {
   settings = {
     displayOrder: defaultDisplaySettings,
     colorsMap: defaultKeyColorMap,
-    enablePrintSeparator: false,
+    enablePrintSeparator: true,
     printSeparator: defaultSeparator,
     enablePrintSpaceBetweenLogKeys: true,
     enableLogCounterIncrement: true,
@@ -69,44 +68,57 @@ class ProcessLogger {
   directLog(obj) {
     let printString = "";
     const size = this.settings.displayOrder.length;
+    let prevKey = null;
+    let nextKey = null;
 
     for (let i = 0; i < size; i++) {
       const setting = this.settings.displayOrder[i];
       let val;
       const key = keyToSettingMap[setting];
+      if (i + 1 < size)
+        nextKey = keyToSettingMap[this.settings.displayOrder[i + 1]];
 
       if (setting !== "TIME") {
         val = obj[key] ?? "null";
       } else {
         const now = new Date();
-        const currentTime = now.toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-        });
-        const day = days[now.getDay()];
+        const milliseconds = now.getMilliseconds();
+
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+
+        const currentTime = `${hours}:${minutes}:${seconds}.${milliseconds
+          .toString()
+          .padStart(3, "0")}`;
+
         const date = now.getDate();
         const month = months[now.getMonth()];
         const year = now.getFullYear();
-        val = `[${currentTime} : ${day} : ${date}/${month}/${year}]`;
+
+        val = `[${date}/${month}/${year}-${currentTime}]`;
       }
 
       printString += this.settings.colorsMap[key].fgColor;
       printString += this.settings.colorsMap[key].bgColor;
 
-      if (this.settings.enablePrintSpaceBetweenLogKeys && i != 0) {
+      if (this.settings.enablePrintSpaceBetweenLogKeys === true && i != 0) {
         printString += " " + val;
       } else {
         printString += val;
       }
+      if (this.settings.enablePrintSpaceBetweenLogKeys === true)
+        printString += " ";
 
       printString += colorsMap.reset;
-
-      if (i < size - 1 && this.settings.enablePrintSeparator && i != 0) {
+      if (i < size - 1 && this.settings.enablePrintSeparator) {
+        printString += this.settings.colorsMap[key].fgComplementary;
+        printString += this.settings.colorsMap[nextKey].bgColor;
         printString += this.settings.printSeparator;
       }
+      prevKey = key;
+      printString += colorsMap.reset;
     }
-
     console.log(printString);
   }
 
